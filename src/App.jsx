@@ -1,16 +1,20 @@
 import { useMemo, useState } from "react";
 
-const philosophersData = [
+const initialPhilosophers = [
   {
     id: "socrates",
     name: "Sócrates",
     era: "Antigua",
     school: "Socratismo",
     quote: "Solo sé que no sé nada.",
+    bio: "Maestro ateniense que convirtió la pregunta crítica en un arte filosófico.",
     atk: 84,
     def: 78,
     wis: 95,
-    color: "#d4a373",
+    strength: "Sofística",
+    weakness: "Escepticismo",
+    color: "#c08b5c",
+    wins: 0,
   },
   {
     id: "plato",
@@ -18,10 +22,14 @@ const philosophersData = [
     era: "Antigua",
     school: "Idealismo",
     quote: "El conocimiento verdadero reside en las ideas.",
+    bio: "Discípulo de Sócrates y autor de diálogos fundamentales para Occidente.",
     atk: 88,
     def: 86,
     wis: 94,
-    color: "#b08968",
+    strength: "Materialismo",
+    weakness: "Empirismo",
+    color: "#a87f62",
+    wins: 0,
   },
   {
     id: "aristotle",
@@ -29,21 +37,119 @@ const philosophersData = [
     era: "Antigua",
     school: "Peripatetismo",
     quote: "El hombre es un animal racional.",
+    bio: "Pensador enciclopédico que sistematizó lógica, ética, política y metafísica.",
     atk: 90,
     def: 89,
     wis: 92,
+    strength: "Idealismo",
+    weakness: "Escepticismo",
     color: "#7f5539",
+    wins: 0,
+  },
+  {
+    id: "epicurus",
+    name: "Epicuro",
+    era: "Antigua",
+    school: "Epicureísmo",
+    quote: "El placer es el principio y el fin de una vida feliz.",
+    bio: "Defendió la serenidad, la amistad y la moderación como núcleo de la felicidad.",
+    atk: 76,
+    def: 83,
+    wis: 85,
+    strength: "Estoicismo",
+    weakness: "Ascetismo",
+    color: "#8f9779",
+    wins: 0,
+  },
+  {
+    id: "confucius",
+    name: "Confucio",
+    era: "Antigua",
+    school: "Confucianismo",
+    quote: "Exígete mucho a ti mismo y espera poco de los demás.",
+    bio: "Maestro de la armonía ética, el deber y el orden en las relaciones humanas.",
+    atk: 80,
+    def: 88,
+    wis: 94,
+    strength: "Caos político",
+    weakness: "Individualismo radical",
+    color: "#2a9d8f",
+    wins: 0,
+  },
+  {
+    id: "aquinas",
+    name: "Tomás de Aquino",
+    era: "Medieval",
+    school: "Escolástica",
+    quote: "La fe y la razón no se contradicen.",
+    bio: "Unió tradición cristiana y filosofía aristotélica en una síntesis monumental.",
+    atk: 87,
+    def: 91,
+    wis: 90,
+    strength: "Averroísmo",
+    weakness: "Existencialismo",
+    color: "#5d5f71",
+    wins: 0,
+  },
+  {
+    id: "hobbes",
+    name: "Hobbes",
+    era: "Moderna",
+    school: "Contractualismo",
+    quote: "El hombre es un lobo para el hombre.",
+    bio: "Teórico del Estado fuerte como respuesta al conflicto y la inseguridad.",
+    atk: 86,
+    def: 84,
+    wis: 80,
+    strength: "Anarquismo",
+    weakness: "Humanismo",
+    color: "#6d597a",
+    wins: 0,
+  },
+  {
+    id: "rousseau",
+    name: "Rousseau",
+    era: "Moderna",
+    school: "Contractualismo",
+    quote: "El hombre nace libre, pero en todas partes está encadenado.",
+    bio: "Crítico de la desigualdad y defensor de la voluntad general.",
+    atk: 85,
+    def: 79,
+    wis: 88,
+    strength: "Absolutismo",
+    weakness: "Liberalismo",
+    color: "#4d908e",
+    wins: 0,
   },
   {
     id: "kant",
     name: "Kant",
     era: "Moderna",
     school: "Criticismo",
-    quote: "Obra solo según una máxima universal.",
+    quote: "Obra solo según una máxima que puedas querer como ley universal.",
+    bio: "Revolucionó la filosofía al estudiar las condiciones del conocimiento y la moral.",
     atk: 91,
     def: 88,
     wis: 96,
+    strength: "Utilitarismo",
+    weakness: "Nihilismo",
     color: "#457b9d",
+    wins: 0,
+  },
+  {
+    id: "bentham",
+    name: "Bentham",
+    era: "Moderna",
+    school: "Utilitarismo",
+    quote: "La mayor felicidad para el mayor número.",
+    bio: "Pensador reformista que midió la moral por sus consecuencias sociales.",
+    atk: 82,
+    def: 77,
+    wis: 81,
+    strength: "Dogmatismo",
+    weakness: "Criticismo",
+    color: "#577590",
+    wins: 0,
   },
   {
     id: "marx",
@@ -51,10 +157,14 @@ const philosophersData = [
     era: "Contemporánea",
     school: "Materialismo",
     quote: "De lo que se trata es de transformar el mundo.",
+    bio: "Analizó la historia desde la lucha de clases y el conflicto económico.",
     atk: 93,
     def: 84,
     wis: 89,
+    strength: "Idealismo",
+    weakness: "Liberalismo",
     color: "#b23a48",
+    wins: 0,
   },
   {
     id: "nietzsche",
@@ -62,10 +172,44 @@ const philosophersData = [
     era: "Contemporánea",
     school: "Vitalismo",
     quote: "Dios ha muerto.",
+    bio: "Criticó radicalmente la moral tradicional y los valores heredados.",
     atk: 95,
     def: 74,
     wis: 90,
+    strength: "Moral tradicional",
+    weakness: "Escolástica",
     color: "#6a4c93",
+    wins: 0,
+  },
+  {
+    id: "sartre",
+    name: "Sartre",
+    era: "Contemporánea",
+    school: "Existencialismo",
+    quote: "Estamos condenados a ser libres.",
+    bio: "Puso la libertad y la responsabilidad en el centro de la existencia humana.",
+    atk: 89,
+    def: 76,
+    wis: 87,
+    strength: "Esencialismo",
+    weakness: "Estructuralismo",
+    color: "#9c6644",
+    wins: 0,
+  },
+  {
+    id: "camus",
+    name: "Camus",
+    era: "Contemporánea",
+    school: "Absurdismo",
+    quote: "Hay que imaginar a Sísifo feliz.",
+    bio: "Exploró el absurdo de la existencia y la dignidad de la rebelión.",
+    atk: 83,
+    def: 80,
+    wis: 88,
+    strength: "Nihilismo",
+    weakness: "Dogmatismo",
+    color: "#bc6c25",
+    wins: 0,
   },
   {
     id: "debeauvoir",
@@ -73,23 +217,76 @@ const philosophersData = [
     era: "Contemporánea",
     school: "Feminismo existencialista",
     quote: "No se nace mujer: se llega a serlo.",
+    bio: "Figura clave del feminismo contemporáneo y de la filosofía de la libertad.",
     atk: 90,
     def: 82,
     wis: 91,
+    strength: "Patriarcado",
+    weakness: "Esencialismo",
     color: "#e76f51",
+    wins: 0,
   },
   {
-    id: "confucius",
-    name: "Confucio",
-    era: "Antigua",
-    school: "Confucianismo",
-    quote: "Exígete mucho a ti mismo.",
-    atk: 80,
-    def: 88,
-    wis: 94,
-    color: "#2a9d8f",
+    id: "arendt",
+    name: "Hannah Arendt",
+    era: "Contemporánea",
+    school: "Teoría política",
+    quote: "El mal puede volverse banal.",
+    bio: "Analizó el poder, el totalitarismo y la responsabilidad política moderna.",
+    atk: 88,
+    def: 87,
+    wis: 93,
+    strength: "Totalitarismo",
+    weakness: "Cinismo",
+    color: "#3d5a80",
+    wins: 0,
   },
 ];
+
+const eras = ["Todas", "Antigua", "Medieval", "Moderna", "Contemporánea"];
+
+function statBar(label, value) {
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: 13,
+          marginBottom: 4,
+          color: "#eef2ff",
+        }}
+      >
+        <span>{label}</span>
+        <strong>{value}</strong>
+      </div>
+      <div
+        style={{
+          height: 8,
+          background: "rgba(255,255,255,0.16)",
+          borderRadius: 999,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${Math.min(value, 100)}%`,
+            height: "100%",
+            background: "linear-gradient(90deg, #ffd166, #f4a261)",
+            borderRadius: 999,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function getAttackBonus(a, b) {
+  if (!a || !b) return 0;
+  if (a.strength === b.school) return 8;
+  if (a.weakness === b.school) return -8;
+  return 0;
+}
 
 function duel(a, b) {
   const rounds = [
@@ -102,78 +299,82 @@ function duel(a, b) {
   let scoreB = 0;
   const details = [];
 
-  for (const round of rounds) {
-    if (a[round.key] > b[round.key]) {
-      scoreA++;
-      details.push(`${round.label}: gana ${a.name} (${a[round.key]} vs ${b[round.key]})`);
-    } else if (b[round.key] > a[round.key]) {
-      scoreB++;
-      details.push(`${round.label}: gana ${b.name} (${b[round.key]} vs ${a[round.key]})`);
+  rounds.forEach((round) => {
+    const bonusA = round.key === "atk" ? getAttackBonus(a, b) : 0;
+    const bonusB = round.key === "atk" ? getAttackBonus(b, a) : 0;
+    const totalA = a[round.key] + bonusA;
+    const totalB = b[round.key] + bonusB;
+
+    if (totalA > totalB) {
+      scoreA += 1;
+      details.push({
+        label: round.label,
+        winner: a.name,
+        totalA,
+        totalB,
+        bonusA,
+        bonusB,
+      });
+    } else if (totalB > totalA) {
+      scoreB += 1;
+      details.push({
+        label: round.label,
+        winner: b.name,
+        totalA,
+        totalB,
+        bonusA,
+        bonusB,
+      });
     } else {
-      details.push(`${round.label}: empate (${a[round.key]} vs ${b[round.key]})`);
+      scoreA += 1;
+      scoreB += 1;
+      details.push({
+        label: round.label,
+        winner: "Empate",
+        totalA,
+        totalB,
+        bonusA,
+        bonusB,
+      });
     }
+  });
+
+  let winner = scoreA >= scoreB ? a : b;
+
+  if (scoreA === scoreB) {
+    const totalBaseA = a.atk + a.def + a.wis;
+    const totalBaseB = b.atk + b.def + b.wis;
+    winner = totalBaseA >= totalBaseB ? a : b;
   }
 
-  const winner = scoreA >= scoreB ? a : b;
+  const narration = [
+    `En la arena del pensamiento, ${a.name} y ${b.name} se enfrentan en un duelo de ideas.`,
+    ...details.map((d) => {
+      if (d.label === "Argumento") {
+        return `${d.label}: ${d.winner} domina la ronda (${d.totalA} vs ${d.totalB}). Las afinidades y debilidades doctrinales inclinan el choque inicial.`;
+      }
+      return `${d.label}: ${d.winner} se impone (${d.totalA} vs ${d.totalB}) y gana terreno en la batalla filosófica.`;
+    }),
+    `Tras tres rondas, la victoria es para ${winner.name}. Su legado suma un nuevo triunfo.`,
+  ];
 
-  return {
-    winner,
-    scoreA,
-    scoreB,
-    details,
-  };
+  return { winner, scoreA, scoreB, details, narration };
 }
 
-function statBar(label, value) {
-  return (
-    <div style={{ marginBottom: 10 }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          fontSize: 13,
-          marginBottom: 4,
-          color: "#eaeaea",
-        }}
-      >
-        <span>{label}</span>
-        <strong>{value}</strong>
-      </div>
-      <div
-        style={{
-          height: 8,
-          background: "rgba(255,255,255,0.18)",
-          borderRadius: 999,
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            width: `${value}%`,
-            height: "100%",
-            background: "linear-gradient(90deg, #ffd166, #f4a261)",
-            borderRadius: 999,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function cardStyle(selected, color) {
+function getCardStyle(selected, color) {
   return {
-    background: `linear-gradient(180deg, ${color}, #1f1f1f)`,
+    background: `linear-gradient(180deg, ${color}, #1a1d28)`,
     color: "white",
     borderRadius: 22,
     padding: 18,
     cursor: "pointer",
     border: selected ? "3px solid #ffd166" : "2px solid rgba(255,255,255,0.08)",
     boxShadow: selected
-      ? "0 0 0 3px rgba(255,209,102,0.25), 0 14px 30px rgba(0,0,0,0.35)"
-      : "0 10px 24px rgba(0,0,0,0.22)",
+      ? "0 0 0 3px rgba(255,209,102,0.22), 0 16px 30px rgba(0,0,0,0.35)"
+      : "0 12px 24px rgba(0,0,0,0.24)",
     transform: selected ? "translateY(-4px) scale(1.01)" : "translateY(0)",
     transition: "all 0.2s ease",
-    minHeight: 320,
+    minHeight: 465,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -181,15 +382,25 @@ function cardStyle(selected, color) {
 }
 
 export default function App() {
+  const [philosophers, setPhilosophers] = useState(initialPhilosophers);
+  const [eraFilter, setEraFilter] = useState("Todas");
   const [selectedA, setSelectedA] = useState(null);
   const [selectedB, setSelectedB] = useState(null);
   const [result, setResult] = useState(null);
 
-  const philosophers = useMemo(() => philosophersData, []);
+  const filteredPhilosophers = useMemo(() => {
+    if (eraFilter === "Todas") return philosophers;
+    return philosophers.filter((p) => p.era === eraFilter);
+  }, [eraFilter, philosophers]);
+
+  const ranking = useMemo(() => {
+    return [...philosophers].sort((a, b) => b.wins - a.wins).slice(0, 5);
+  }, [philosophers]);
+
   const fighterA = philosophers.find((p) => p.id === selectedA) || null;
   const fighterB = philosophers.find((p) => p.id === selectedB) || null;
 
-  const pickPhilosopher = (p) => {
+  function pickPhilosopher(p) {
     if (!selectedA) {
       setSelectedA(p.id);
       setResult(null);
@@ -213,72 +424,70 @@ export default function App() {
     setSelectedA(p.id);
     setSelectedB(null);
     setResult(null);
-  };
+  }
 
-  const startDuel = () => {
-    if (fighterA && fighterB) {
-      setResult(duel(fighterA, fighterB));
-    }
-  };
+  function startDuel() {
+    if (!fighterA || !fighterB) return;
+    const duelResult = duel(fighterA, fighterB);
+    setResult(duelResult);
+    setPhilosophers((prev) =>
+      prev.map((p) =>
+        p.id === duelResult.winner.id ? { ...p, wins: p.wins + 1 } : p
+      )
+    );
+  }
 
-  const resetAll = () => {
+  function resetSelection() {
     setSelectedA(null);
     setSelectedB(null);
     setResult(null);
-  };
+  }
 
   return (
     <div
       style={{
         minHeight: "100vh",
         background:
-          "radial-gradient(circle at top, #2b2d42 0%, #1b1d2a 35%, #0f1117 100%)",
+          "radial-gradient(circle at top, #2b2d42 0%, #171923 38%, #0b0d12 100%)",
         color: "white",
         padding: 24,
         fontFamily:
           'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       }}
     >
-      <div style={{ maxWidth: 1300, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1380, margin: "0 auto" }}>
         <div
           style={{
             background: "linear-gradient(135deg, #1f2233, #2d3148)",
             border: "1px solid rgba(255,255,255,0.08)",
             borderRadius: 28,
             padding: 24,
-            boxShadow: "0 16px 40px rgba(0,0,0,0.3)",
-            marginBottom: 24,
+            boxShadow: "0 18px 40px rgba(0,0,0,0.3)",
+            marginBottom: 22,
           }}
         >
           <h1
             style={{
               margin: 0,
-              fontSize: 42,
-              lineHeight: 1.1,
+              fontSize: 40,
+              lineHeight: 1.08,
               letterSpacing: "-0.03em",
             }}
           >
             FiloCards ⚔️
           </h1>
-          <p
-            style={{
-              marginTop: 10,
-              marginBottom: 0,
-              color: "#d7d9e3",
-              fontSize: 17,
-            }}
-          >
-            El duelo de las ideas. Elige dos pensadores y enfréntalos en una batalla
-            filosófica de tres rondas.
+          <p style={{ marginTop: 10, marginBottom: 0, color: "#d9deef", fontSize: 17 }}>
+            El duelo de las ideas. Colecciona pensadores, filtra por épocas y
+            enfrenta corrientes filosóficas en tres rondas.
           </p>
         </div>
 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1.2fr 0.8fr",
+            gridTemplateColumns: "1.25fr 0.75fr",
             gap: 20,
-            marginBottom: 24,
+            marginBottom: 22,
           }}
         >
           <div
@@ -290,13 +499,14 @@ export default function App() {
               backdropFilter: "blur(8px)",
             }}
           >
-            <h2 style={{ marginTop: 0 }}>Seleccionados para el duelo</h2>
+            <h2 style={{ marginTop: 0 }}>Preparación del duelo</h2>
 
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
                 gap: 12,
+                marginBottom: 16,
               }}
             >
               <div
@@ -304,17 +514,17 @@ export default function App() {
                   background: "rgba(255,255,255,0.07)",
                   borderRadius: 18,
                   padding: 16,
-                  minHeight: 90,
+                  minHeight: 96,
                 }}
               >
-                <div style={{ color: "#aab1c8", fontSize: 13, marginBottom: 8 }}>
+                <div style={{ color: "#adb7d6", fontSize: 13, marginBottom: 8 }}>
                   Pensador A
                 </div>
                 <div style={{ fontSize: 20, fontWeight: 700 }}>
                   {fighterA ? fighterA.name : "Sin seleccionar"}
                 </div>
                 {fighterA && (
-                  <div style={{ color: "#d7d9e3", marginTop: 6 }}>{fighterA.school}</div>
+                  <div style={{ color: "#dfe5ff", marginTop: 6 }}>{fighterA.school}</div>
                 )}
               </div>
 
@@ -323,28 +533,48 @@ export default function App() {
                   background: "rgba(255,255,255,0.07)",
                   borderRadius: 18,
                   padding: 16,
-                  minHeight: 90,
+                  minHeight: 96,
                 }}
               >
-                <div style={{ color: "#aab1c8", fontSize: 13, marginBottom: 8 }}>
+                <div style={{ color: "#adb7d6", fontSize: 13, marginBottom: 8 }}>
                   Pensador B
                 </div>
                 <div style={{ fontSize: 20, fontWeight: 700 }}>
                   {fighterB ? fighterB.name : "Sin seleccionar"}
                 </div>
                 {fighterB && (
-                  <div style={{ color: "#d7d9e3", marginTop: 6 }}>{fighterB.school}</div>
+                  <div style={{ color: "#dfe5ff", marginTop: 6 }}>{fighterB.school}</div>
                 )}
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
+              {eras.map((era) => (
+                <button
+                  key={era}
+                  onClick={() => setEraFilter(era)}
+                  style={{
+                    background: eraFilter === era ? "#ffd166" : "rgba(255,255,255,0.08)",
+                    color: eraFilter === era ? "#161616" : "white",
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "10px 14px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  {era}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <button
                 onClick={startDuel}
                 disabled={!fighterA || !fighterB}
                 style={{
                   background: !fighterA || !fighterB ? "#666" : "#ffd166",
-                  color: "#1a1a1a",
+                  color: "#181818",
                   border: "none",
                   borderRadius: 14,
                   padding: "12px 20px",
@@ -357,11 +587,11 @@ export default function App() {
               </button>
 
               <button
-                onClick={resetAll}
+                onClick={resetSelection}
                 style={{
                   background: "transparent",
                   color: "white",
-                  border: "1px solid rgba(255,255,255,0.2)",
+                  border: "1px solid rgba(255,255,255,0.18)",
                   borderRadius: 14,
                   padding: "12px 20px",
                   fontWeight: 700,
@@ -383,12 +613,249 @@ export default function App() {
               backdropFilter: "blur(8px)",
             }}
           >
-            <h2 style={{ marginTop: 0 }}>Resultado</h2>
+            <h2 style={{ marginTop: 0 }}>Ranking de victorias</h2>
+            {ranking.map((p, index) => (
+              <div
+                key={p.id}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  background: "rgba(255,255,255,0.06)",
+                  borderRadius: 16,
+                  padding: "12px 14px",
+                  marginBottom: 10,
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: 12, color: "#b7c1de" }}>#{index + 1}</div>
+                  <div style={{ fontWeight: 700 }}>{p.name}</div>
+                </div>
+                <div
+                  style={{
+                    background: "#ffd166",
+                    color: "#1a1a1a",
+                    borderRadius: 999,
+                    padding: "8px 12px",
+                    fontWeight: 800,
+                    minWidth: 44,
+                    textAlign: "center",
+                  }}
+                >
+                  {p.wins}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.2fr 0.8fr",
+            gap: 20,
+            marginBottom: 24,
+          }}
+        >
+          <div
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 24,
+              padding: 20,
+            }}
+          >
+            <h2 style={{ marginTop: 0 }}>
+              Colección de cartas ({filteredPhilosophers.length})
+            </h2>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: 18,
+              }}
+            >
+              {filteredPhilosophers.map((p) => {
+                const selected = p.id === selectedA || p.id === selectedB;
+
+                return (
+                  <div
+                    key={p.id}
+                    onClick={() => pickPhilosopher(p)}
+                    style={getCardStyle(selected, p.color)}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: 12,
+                          alignItems: "flex-start",
+                          marginBottom: 12,
+                        }}
+                      >
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 24,
+                              fontWeight: 800,
+                              lineHeight: 1.1,
+                              marginBottom: 6,
+                            }}
+                          >
+                            {p.name}
+                          </div>
+                          <div
+                            style={{
+                              display: "inline-block",
+                              fontSize: 12,
+                              fontWeight: 700,
+                              background: "rgba(255,255,255,0.16)",
+                              padding: "6px 10px",
+                              borderRadius: 999,
+                              marginRight: 8,
+                            }}
+                          >
+                            {p.era}
+                          </div>
+                        </div>
+
+                        {selected && (
+                          <div
+                            style={{
+                              fontSize: 12,
+                              fontWeight: 800,
+                              background: "#ffd166",
+                              color: "#1a1a1a",
+                              padding: "6px 10px",
+                              borderRadius: 999,
+                            }}
+                          >
+                            SELECCIONADA
+                          </div>
+                        )}
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 700,
+                          color: "#fff1c6",
+                          marginBottom: 10,
+                        }}
+                      >
+                        {p.school}
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: 14,
+                          lineHeight: 1.5,
+                          color: "#f5f5f5",
+                          fontStyle: "italic",
+                          marginBottom: 14,
+                          minHeight: 42,
+                        }}
+                      >
+                        “{p.quote}”
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: 13,
+                          lineHeight: 1.45,
+                          color: "#e8ecf8",
+                          marginBottom: 14,
+                          minHeight: 56,
+                        }}
+                      >
+                        {p.bio}
+                      </div>
+
+                      {statBar("ATQ", p.atk)}
+                      {statBar("DEF", p.def)}
+                      {statBar("SAB", p.wis)}
+
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 1fr",
+                          gap: 10,
+                          marginTop: 14,
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "rgba(16,185,129,0.16)",
+                            borderRadius: 14,
+                            padding: 10,
+                          }}
+                        >
+                          <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 4 }}>
+                            Fortaleza
+                          </div>
+                          <div style={{ fontSize: 13 }}>{p.strength}</div>
+                        </div>
+
+                        <div
+                          style={{
+                            background: "rgba(239,68,68,0.16)",
+                            borderRadius: 14,
+                            padding: 10,
+                          }}
+                        >
+                          <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 4 }}>
+                            Debilidad
+                          </div>
+                          <div style={{ fontSize: 13 }}>{p.weakness}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 14,
+                        paddingTop: 12,
+                        borderTop: "1px solid rgba(255,255,255,0.12)",
+                        color: "#f7f7f7",
+                        fontSize: 13,
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Carta coleccionable</span>
+                      <strong>🏆 {p.wins}</strong>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 24,
+              padding: 20,
+            }}
+          >
+            <h2 style={{ marginTop: 0 }}>Crónica del combate</h2>
 
             {!result ? (
-              <p style={{ color: "#d7d9e3", lineHeight: 1.6 }}>
-                Selecciona dos cartas y pulsa <strong>Iniciar duelo</strong>.
-              </p>
+              <div
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  borderRadius: 18,
+                  padding: 18,
+                  color: "#d7def4",
+                  lineHeight: 1.6,
+                }}
+              >
+                Selecciona dos pensadores y pulsa <strong>Iniciar duelo</strong>.
+                La ronda de Argumento incorpora ventajas y debilidades doctrinales.
+              </div>
             ) : (
               <>
                 <div
@@ -401,7 +868,7 @@ export default function App() {
                     boxShadow: "0 10px 24px rgba(0,0,0,0.25)",
                   }}
                 >
-                  <div style={{ fontSize: 13, fontWeight: 700, opacity: 0.85 }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, opacity: 0.85 }}>
                     GANADOR
                   </div>
                   <div style={{ fontSize: 28, fontWeight: 800, marginTop: 4 }}>
@@ -413,6 +880,31 @@ export default function App() {
                   </div>
                 </div>
 
+                <div style={{ marginBottom: 16 }}>
+                  {result.details.map((d, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        borderRadius: 16,
+                        padding: 14,
+                        marginBottom: 10,
+                      }}
+                    >
+                      <div style={{ fontWeight: 800, marginBottom: 6 }}>{d.label}</div>
+                      <div style={{ color: "#e7ebff", fontSize: 14, lineHeight: 1.5 }}>
+                        {fighterA?.name}: {d.totalA}
+                        {d.label === "Argumento" && ` (${d.bonusA >= 0 ? "+" : ""}${d.bonusA})`}
+                        <br />
+                        {fighterB?.name}: {d.totalB}
+                        {d.label === "Argumento" && ` (${d.bonusB >= 0 ? "+" : ""}${d.bonusB})`}
+                        <br />
+                        <strong>Vence: {d.winner}</strong>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
                 <div
                   style={{
                     background: "rgba(255,255,255,0.05)",
@@ -420,19 +912,20 @@ export default function App() {
                     padding: 16,
                   }}
                 >
-                  <div style={{ fontWeight: 700, marginBottom: 10 }}>
-                    Crónica del combate
+                  <div style={{ fontWeight: 800, marginBottom: 10 }}>
+                    Narración filosófica
                   </div>
-                  {result.details.map((line, index) => (
+                  {result.narration.map((line, index) => (
                     <div
                       key={index}
                       style={{
                         padding: "8px 0",
                         borderBottom:
-                          index !== result.details.length - 1
+                          index !== result.narration.length - 1
                             ? "1px solid rgba(255,255,255,0.08)"
                             : "none",
-                        color: "#e7e9f2",
+                        color: "#e9edfb",
+                        lineHeight: 1.5,
                       }}
                     >
                       {line}
@@ -442,119 +935,6 @@ export default function App() {
               </>
             )}
           </div>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: 18,
-          }}
-        >
-          {philosophers.map((p) => {
-            const selected = p.id === selectedA || p.id === selectedB;
-
-            return (
-              <div
-                key={p.id}
-                onClick={() => pickPhilosopher(p)}
-                style={cardStyle(selected, p.color)}
-              >
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      alignItems: "start",
-                      marginBottom: 12,
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 24,
-                          fontWeight: 800,
-                          lineHeight: 1.1,
-                          marginBottom: 6,
-                        }}
-                      >
-                        {p.name}
-                      </div>
-                      <div
-                        style={{
-                          display: "inline-block",
-                          fontSize: 12,
-                          fontWeight: 700,
-                          background: "rgba(255,255,255,0.16)",
-                          padding: "6px 10px",
-                          borderRadius: 999,
-                        }}
-                      >
-                        {p.era}
-                      </div>
-                    </div>
-
-                    {selected && (
-                      <div
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 800,
-                          background: "#ffd166",
-                          color: "#1a1a1a",
-                          padding: "6px 10px",
-                          borderRadius: 999,
-                        }}
-                      >
-                        SELECCIONADA
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: 14,
-                      fontWeight: 700,
-                      color: "#fff3d6",
-                      marginBottom: 10,
-                    }}
-                  >
-                    {p.school}
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: 14,
-                      lineHeight: 1.5,
-                      color: "#f2f2f2",
-                      fontStyle: "italic",
-                      marginBottom: 18,
-                      minHeight: 42,
-                    }}
-                  >
-                    “{p.quote}”
-                  </div>
-
-                  {statBar("ATQ", p.atk)}
-                  {statBar("DEF", p.def)}
-                  {statBar("SAB", p.wis)}
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 14,
-                    paddingTop: 12,
-                    borderTop: "1px solid rgba(255,255,255,0.12)",
-                    color: "#f8f8f8",
-                    fontSize: 13,
-                    opacity: 0.9,
-                  }}
-                >
-                  Carta filosófica coleccionable
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </div>
