@@ -435,6 +435,32 @@ function getAttackBonus(a, b) {
   return 0;
 }
 
+function getSchoolIcon(school) {
+  if (school === "Socratismo") return "🧠";
+  if (school === "Idealismo") return "🏛️";
+  if (school === "Peripatetismo") return "📚";
+  if (school === "Epicureísmo") return "🍇";
+  if (school === "Confucianismo") return "🧭";
+  if (school === "Estoicismo") return "🗿";
+  if (school === "Cinismo") return "🕯️";
+  if (school === "Escolástica") return "⛪";
+  if (school === "Contractualismo") return "📜";
+  if (school === "Criticismo") return "⚖️";
+  if (school === "Utilitarismo") return "📊";
+  if (school === "Racionalismo") return "🔷";
+  if (school === "Empirismo") return "🔬";
+  if (school === "Materialismo") return "🔨";
+  if (school === "Vitalismo") return "🔥";
+  if (school === "Existencialismo") return "🎭";
+  if (school === "Absurdismo") return "🪨";
+  if (school === "Feminismo existencialista") return "♀️";
+  if (school === "Teoría política") return "🏛";
+  if (school === "Postestructuralismo") return "👁️";
+  if (school === "Deconstrucción") return "🌀";
+  if (school === "Liberalismo") return "🕊️";
+  return "❓";
+}
+
 function statBar(label, value) {
   return (
     <div style={{ marginBottom: 10 }}>
@@ -553,7 +579,17 @@ function duel(a, b) {
   return { winner, scoreA, scoreB, details, narration };
 }
 
-function getCardStyle(selected, color) {
+function getCardStyle(selected, color, rarity) {
+  const legendaryGlow =
+    rarity === "Legendaria"
+      ? "0 0 0 2px rgba(255,209,102,0.25), 0 0 18px rgba(255,209,102,0.35), 0 0 40px rgba(255,209,102,0.18), 0 12px 24px rgba(0,0,0,0.24)"
+      : "0 12px 24px rgba(0,0,0,0.24)";
+
+  const selectedGlow =
+    rarity === "Legendaria"
+      ? "0 0 0 3px rgba(255,209,102,0.28), 0 0 22px rgba(255,209,102,0.45), 0 0 48px rgba(255,209,102,0.22), 0 16px 30px rgba(0,0,0,0.35)"
+      : "0 0 0 3px rgba(255,209,102,0.22), 0 16px 30px rgba(0,0,0,0.35)";
+
   return {
     background: `linear-gradient(180deg, ${color}, #1a1d28)`,
     color: "white",
@@ -561,9 +597,7 @@ function getCardStyle(selected, color) {
     padding: 18,
     cursor: "pointer",
     border: selected ? "3px solid #ffd166" : "2px solid rgba(255,255,255,0.08)",
-    boxShadow: selected
-      ? "0 0 0 3px rgba(255,209,102,0.22), 0 16px 30px rgba(0,0,0,0.35)"
-      : "0 12px 24px rgba(0,0,0,0.24)",
+    boxShadow: selected ? selectedGlow : legendaryGlow,
     transform: selected ? "translateY(-4px) scale(1.01)" : "translateY(0)",
     transition: "all 0.2s ease",
     minHeight: 500,
@@ -918,9 +952,23 @@ export default function App() {
                   <div
                     key={p.id}
                     onClick={() => pickPhilosopher(p)}
-                    style={getCardStyle(selected, p.color)}
+                    style={getCardStyle(selected, p.color, p.rarity)}
                   >
                     <div>
+                      <div
+                        style={{
+                          fontSize: 52,
+                          marginBottom: 12,
+                          textAlign: "center",
+                          filter:
+                            p.rarity === "Legendaria"
+                              ? "drop-shadow(0 0 10px rgba(255,209,102,0.45))"
+                              : "none",
+                        }}
+                      >
+                        {getSchoolIcon(p.school)}
+                      </div>
+
                       <div
                         style={{
                           display: "flex",
@@ -1144,15 +1192,13 @@ export default function App() {
                     >
                       <div style={{ fontWeight: 800, marginBottom: 6 }}>{d.label}</div>
                       <div style={{ color: "#e7ebff", fontSize: 14, lineHeight: 1.5 }}>
-                        {fighterA?.name}: {d.totalA}
-                        {"  "}
+                        {fighterA?.name}: {d.totalA}{" "}
                         <span style={{ color: "#b9c5ea" }}>
                           (escuela {d.attackBonusA >= 0 ? "+" : ""}
                           {d.attackBonusA}, rareza +{d.rarityBonusA})
                         </span>
                         <br />
-                        {fighterB?.name}: {d.totalB}
-                        {"  "}
+                        {fighterB?.name}: {d.totalB}{" "}
                         <span style={{ color: "#b9c5ea" }}>
                           (escuela {d.attackBonusB >= 0 ? "+" : ""}
                           {d.attackBonusB}, rareza +{d.rarityBonusB})
