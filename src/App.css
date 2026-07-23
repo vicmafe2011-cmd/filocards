@@ -244,6 +244,176 @@
   object-fit: cover;
 }
 
+.filocard__s02 {
+  box-sizing: border-box;
+  min-height: 510px;
+  padding: 12px;
+  color: #f8e8ba;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(189, 135, 49, 0.2), transparent 42%),
+    linear-gradient(165deg, #0b2d48, #06182b 62%);
+  text-align: left;
+}
+
+.filocard__s02-brand,
+.filocard__s02-series,
+.filocard__s02-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.filocard__s02-brand {
+  padding: 0 2px 8px;
+  border-bottom: 1px solid rgba(239, 191, 77, 0.58);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.filocard__s02-brand b {
+  margin-right: 3px;
+  color: #efbf4d;
+  font-size: 19px;
+}
+
+.filocard__s02-brand small,
+.filocard__s02-series {
+  font-family: system-ui, sans-serif;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.filocard__s02-brand small {
+  color: #efbf4d;
+}
+
+.filocard__s02-series {
+  padding: 8px 2px;
+  color: #f6df9d;
+}
+
+.filocard__s02-portrait {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.22 / 1;
+  border: 1px solid rgba(239, 191, 77, 0.66);
+  border-radius: 12px;
+  background: #0b2d48;
+}
+
+.filocard__s02-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 37%;
+}
+
+.filocard__s02-affinity,
+.filocard__s02-power {
+  position: absolute;
+  bottom: 9px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 238, 190, 0.5);
+  border-radius: 999px;
+  color: #fff4ce;
+  background: rgba(5, 24, 43, 0.88);
+  font: 900 9px/1 system-ui, sans-serif;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.filocard__s02-affinity {
+  left: 9px;
+}
+
+.filocard__s02-power {
+  right: 9px;
+}
+
+.filocard__s02-title {
+  padding: 10px 2px 4px;
+}
+
+.filocard__s02-title h3 {
+  margin: 0;
+  color: #fff0c2;
+  font: 800 25px/1 Georgia, "Times New Roman", serif;
+}
+
+.filocard__s02-title span {
+  color: #efbf4d;
+  font: 900 8px/1 system-ui, sans-serif;
+  letter-spacing: 0.08em;
+}
+
+.filocard__s02-epithet {
+  min-height: 22px;
+  padding: 4px 2px 8px;
+  color: #e76f51;
+  font: 900 9px/1.2 system-ui, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.filocard__s02-ability {
+  display: grid;
+  gap: 5px;
+  min-height: 58px;
+  padding: 10px 11px;
+  border: 1px solid rgba(239, 191, 77, 0.34);
+  border-radius: 10px;
+  background: rgba(255, 244, 215, 0.08);
+}
+
+.filocard__s02-ability b {
+  color: #efbf4d;
+  font: 900 9px/1 system-ui, sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.filocard__s02-ability span {
+  color: #fff2ce;
+  font: 500 11px/1.25 system-ui, sans-serif;
+}
+
+.filocard__s02-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.filocard__s02-stats span {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #efbf4d;
+  border-radius: 50%;
+  color: #efbf4d;
+  background: #06182b;
+  font: 900 8px/1 system-ui, sans-serif;
+}
+
+.filocard__s02-stats span:first-child {
+  border-color: #c74e32;
+  color: #e76f51;
+}
+
+.filocard__s02-stats span:nth-child(2) {
+  border-color: #2a8a88;
+  color: #49aaa7;
+}
+
+.filocard__s02-stats b {
+  margin-top: 4px;
+  color: #fff7df;
+  font-size: 17px;
+}
+
 .filocard__selection {
   position: absolute;
   top: 12px;
