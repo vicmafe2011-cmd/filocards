@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import "./App.css";
 
 const initialPhilosophers = [
   {
@@ -461,42 +462,6 @@ function getSchoolIcon(school) {
   return "❓";
 }
 
-function statBar(label, value) {
-  return (
-    <div style={{ marginBottom: 10 }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          fontSize: 13,
-          marginBottom: 4,
-          color: "#eef2ff",
-        }}
-      >
-        <span>{label}</span>
-        <strong>{value}</strong>
-      </div>
-      <div
-        style={{
-          height: 8,
-          background: "rgba(255,255,255,0.16)",
-          borderRadius: 999,
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            width: `${Math.min(value, 100)}%`,
-            height: "100%",
-            background: "linear-gradient(90deg, #ffd166, #f4a261)",
-            borderRadius: 999,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
 function duel(a, b) {
   const rounds = [
     { key: "atk", label: "Argumento" },
@@ -579,45 +544,76 @@ function duel(a, b) {
   return { winner, scoreA, scoreB, details, narration };
 }
 
-function getCardStyle(selected, color, rarity) {
-  const legendaryGlow =
-    rarity === "Legendaria"
-      ? "0 0 0 2px rgba(255,209,102,0.25), 0 0 18px rgba(255,209,102,0.35), 0 0 40px rgba(255,209,102,0.18), 0 12px 24px rgba(0,0,0,0.24)"
-      : "0 12px 24px rgba(0,0,0,0.24)";
+const founderCards = {
+  socrates: "/cards/FC-S01-001_Socrates_frente.svg",
+  plato: "/cards/FC-S01-002_Platon_frente.svg",
+  aristotle: "/cards/FC-S01-003_Aristoteles_frente.svg",
+  epicurus: "/cards/FC-S01-004_Epicuro_frente.svg",
+  aquinas: "/cards/FC-S01-005_Tomas_de_Aquino_frente.svg",
+  hobbes: "/cards/FC-S01-006_Thomas_Hobbes_frente.svg",
+  rousseau: "/cards/FC-S01-007_Jean_Jacques_Rousseau_frente.svg",
+  kant: "/cards/FC-S01-008_Immanuel_Kant_frente.svg",
+  bentham: "/cards/FC-S01-009_Jeremy_Bentham_frente.svg",
+  marx: "/cards/FC-S01-010_Karl_Marx_frente.svg",
+  nietzsche: "/cards/FC-S01-011_Friedrich_Nietzsche_frente.svg",
+  sartre: "/cards/FC-S01-012_Jean_Paul_Sartre_frente.svg",
+  camus: "/cards/FC-S01-013_Albert_Camus_frente.svg",
+  debeauvoir: "/cards/FC-S01-014_Simone_de_Beauvoir_frente.svg",
+  arendt: "/cards/FC-S01-015_Hannah_Arendt_frente.svg",
+  confucius: "/cards/FC-S01-016_Confucio_frente.svg",
+};
 
-  const selectedGlow =
-    rarity === "Legendaria"
-      ? "0 0 0 3px rgba(255,209,102,0.28), 0 0 22px rgba(255,209,102,0.45), 0 0 48px rgba(255,209,102,0.22), 0 16px 30px rgba(0,0,0,0.35)"
-      : "0 0 0 3px rgba(255,209,102,0.22), 0 16px 30px rgba(0,0,0,0.35)";
+function PhilosopherCard({ philosopher, selected, onSelect }) {
+  const cardImage = founderCards[philosopher.id];
+  const totalPower = philosopher.atk + philosopher.def + philosopher.wis;
 
-  return {
-    background: `linear-gradient(180deg, ${color}, #1a1d28)`,
-    color: "white",
-    borderRadius: 22,
-    padding: 18,
-    cursor: "pointer",
-    border: selected ? "3px solid #ffd166" : "2px solid rgba(255,255,255,0.08)",
-    boxShadow: selected ? selectedGlow : legendaryGlow,
-    transform: selected ? "translateY(-4px) scale(1.01)" : "translateY(0)",
-    transition: "all 0.2s ease",
-    minHeight: 500,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  };
-}
+  return (
+    <button
+      type="button"
+      className={`filocard ${selected ? "is-selected" : ""} ${
+        philosopher.rarity === "Legendaria" ? "is-legendary" : ""
+      }`}
+      style={{ "--card-accent": philosopher.color }}
+      onClick={onSelect}
+      aria-pressed={selected}
+      aria-label={`${selected ? "Quitar" : "Seleccionar"} a ${philosopher.name}`}
+    >
+      {cardImage ? (
+        <img
+          className="filocard__art"
+          src={cardImage}
+          alt={`Carta FiloCards de ${philosopher.name}`}
+          loading="lazy"
+        />
+      ) : (
+        <div className="filocard__future">
+          <div className="filocard__brand">
+            <span>Φ FiloCards</span>
+            <small>EL DUELO DE LAS IDEAS</small>
+          </div>
+          <div className="filocard__future-code">PRÓXIMA SERIE</div>
+          <div className="filocard__future-icon">{getSchoolIcon(philosopher.school)}</div>
+          <h3>{philosopher.name}</h3>
+          <p>{philosopher.school}</p>
+          <blockquote>“{philosopher.quote}”</blockquote>
+          <div className="filocard__future-stats">
+            <span>ATQ <b>{philosopher.atk}</b></span>
+            <span>DEF <b>{philosopher.def}</b></span>
+            <span>SAB <b>{philosopher.wis}</b></span>
+          </div>
+        </div>
+      )}
 
-function getRarityStyle(rarity) {
-  if (rarity === "Legendaria") {
-    return { background: "#ffd166", color: "#1b1b1b" };
-  }
-  if (rarity === "Épica") {
-    return { background: "#c77dff", color: "#1b1b1b" };
-  }
-  if (rarity === "Rara") {
-    return { background: "#7bdff2", color: "#1b1b1b" };
-  }
-  return { background: "rgba(255,255,255,0.16)", color: "white" };
+      <span className="filocard__selection">
+        {selected ? "SELECCIONADA" : "ELEGIR PARA EL DUELO"}
+      </span>
+      <span className="filocard__meta">
+        <span>{cardImage ? "S01 · FUNDADORES" : philosopher.era.toUpperCase()}</span>
+        <span>PF {totalPower}</span>
+        <span>🏆 {philosopher.wins}</span>
+      </span>
+    </button>
+  );
 }
 
 export default function App() {
@@ -937,197 +933,15 @@ export default function App() {
               Colección de cartas ({filteredPhilosophers.length})
             </h2>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))",
-                gap: 18,
-              }}
-            >
-              {filteredPhilosophers.map((p) => {
-                const selected = p.id === selectedA || p.id === selectedB;
-                const rarityStyle = getRarityStyle(p.rarity);
-
-                return (
-                  <div
-                    key={p.id}
-                    onClick={() => pickPhilosopher(p)}
-                    style={getCardStyle(selected, p.color, p.rarity)}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 52,
-                          marginBottom: 12,
-                          textAlign: "center",
-                          filter:
-                            p.rarity === "Legendaria"
-                              ? "drop-shadow(0 0 10px rgba(255,209,102,0.45))"
-                              : "none",
-                        }}
-                      >
-                        {getSchoolIcon(p.school)}
-                      </div>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          gap: 12,
-                          alignItems: "flex-start",
-                          marginBottom: 12,
-                        }}
-                      >
-                        <div>
-                          <div
-                            style={{
-                              fontSize: 24,
-                              fontWeight: 800,
-                              lineHeight: 1.1,
-                              marginBottom: 6,
-                            }}
-                          >
-                            {p.name}
-                          </div>
-                          <div
-                            style={{
-                              display: "inline-block",
-                              fontSize: 12,
-                              fontWeight: 700,
-                              background: "rgba(255,255,255,0.16)",
-                              padding: "6px 10px",
-                              borderRadius: 999,
-                              marginRight: 8,
-                              marginBottom: 8,
-                            }}
-                          >
-                            {p.era}
-                          </div>
-                        </div>
-
-                        {selected && (
-                          <div
-                            style={{
-                              fontSize: 12,
-                              fontWeight: 800,
-                              background: "#ffd166",
-                              color: "#1a1a1a",
-                              padding: "6px 10px",
-                              borderRadius: 999,
-                            }}
-                          >
-                            SELECCIONADA
-                          </div>
-                        )}
-                      </div>
-
-                      <div
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: "#fff1c6",
-                          marginBottom: 8,
-                        }}
-                      >
-                        {p.school}
-                      </div>
-
-                      <div
-                        style={{
-                          display: "inline-block",
-                          fontSize: 12,
-                          fontWeight: 800,
-                          padding: "6px 10px",
-                          borderRadius: 999,
-                          marginBottom: 10,
-                          ...rarityStyle,
-                        }}
-                      >
-                        {p.rarity}
-                      </div>
-
-                      <div
-                        style={{
-                          fontSize: 14,
-                          lineHeight: 1.5,
-                          color: "#f5f5f5",
-                          fontStyle: "italic",
-                          marginBottom: 14,
-                          minHeight: 42,
-                        }}
-                      >
-                        “{p.quote}”
-                      </div>
-
-                      <div
-                        style={{
-                          fontSize: 13,
-                          lineHeight: 1.45,
-                          color: "#e8ecf8",
-                          marginBottom: 14,
-                          minHeight: 56,
-                        }}
-                      >
-                        {p.bio}
-                      </div>
-
-                      {statBar("ATQ", p.atk)}
-                      {statBar("DEF", p.def)}
-                      {statBar("SAB", p.wis)}
-
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
-                          gap: 10,
-                          marginTop: 14,
-                        }}
-                      >
-                        <div
-                          style={{
-                            background: "rgba(16,185,129,0.16)",
-                            borderRadius: 14,
-                            padding: 10,
-                          }}
-                        >
-                          <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 4 }}>
-                            Fortaleza
-                          </div>
-                          <div style={{ fontSize: 13 }}>{p.strength}</div>
-                        </div>
-
-                        <div
-                          style={{
-                            background: "rgba(239,68,68,0.16)",
-                            borderRadius: 14,
-                            padding: 10,
-                          }}
-                        >
-                          <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 4 }}>
-                            Debilidad
-                          </div>
-                          <div style={{ fontSize: 13 }}>{p.weakness}</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        marginTop: 14,
-                        paddingTop: 12,
-                        borderTop: "1px solid rgba(255,255,255,0.12)",
-                        color: "#f7f7f7",
-                        fontSize: 13,
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span>Carta coleccionable</span>
-                      <strong>🏆 {p.wins}</strong>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="filocards-grid">
+              {filteredPhilosophers.map((p) => (
+                <PhilosopherCard
+                  key={p.id}
+                  philosopher={p}
+                  selected={p.id === selectedA || p.id === selectedB}
+                  onSelect={() => pickPhilosopher(p)}
+                />
+              ))}
             </div>
           </div>
 
