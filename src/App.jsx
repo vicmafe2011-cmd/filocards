@@ -563,8 +563,92 @@ const founderCards = {
   confucius: "/cards/FC-S01-016_Confucio_frente.svg",
 };
 
+const s02Cards = {
+  seneca: {
+    portrait: "/portraits/s02/seneca.svg",
+    code: "FC2-001/010",
+    affinity: "AN",
+    epithet: "EL ARQUITECTO DEL DOMINIO INTERIOR",
+    ability: "PREMEDITATIO MALORUM",
+    effect: "Anticipa una objeción y suma +3 DEF.",
+  },
+  diogenes: {
+    portrait: "/portraits/s02/diogenes.svg",
+    code: "FC2-002/010",
+    affinity: "AN",
+    epithet: "EL DESENMASCARADOR DE CONVENCIONES",
+    ability: "LINTERNA CÍNICA",
+    effect: "Expone una falsa apariencia y suma +3 ATQ.",
+  },
+  descartes: {
+    portrait: "/portraits/s02/descartes.svg",
+    code: "FC2-003/010",
+    affinity: "MO",
+    epithet: "EL FUNDADOR DE LA DUDA METÓDICA",
+    ability: "COGITO",
+    effect: "Descarta una premisa insegura y suma +3 SAB.",
+  },
+  locke: {
+    portrait: "/portraits/s02/locke.svg",
+    code: "FC2-004/010",
+    affinity: "MO",
+    epithet: "EL DEFENSOR DE LA EXPERIENCIA",
+    ability: "TABULA RASA",
+    effect: "Aporta un ejemplo observable y suma +3 SAB.",
+  },
+  hume: {
+    portrait: "/portraits/s02/hume.svg",
+    code: "FC2-005/010",
+    affinity: "MO",
+    epithet: "EL ESCÉPTICO DE LA CAUSALIDAD",
+    ability: "HORQUILLA DE HUME",
+    effect: "Distingue hechos de ideas y suma +3 ATQ.",
+  },
+  hegel: {
+    portrait: "/portraits/s02/hegel.svg",
+    code: "FC2-006/010",
+    affinity: "MO",
+    epithet: "EL MAESTRO DE LA DIALÉCTICA",
+    ability: "NEGACIÓN DETERMINADA",
+    effect: "Integra una contradicción y suma +3 DEF.",
+  },
+  spinoza: {
+    portrait: "/portraits/s02/spinoza.svg",
+    code: "FC2-007/010",
+    affinity: "MO",
+    epithet: "EL GEÓMETRA DE LA LIBERTAD",
+    ability: "SUB SPECIE AETERNITATIS",
+    effect: "Reformula una pasión y suma +3 SAB.",
+  },
+  foucault: {
+    portrait: "/portraits/s02/foucault.svg",
+    code: "FC2-008/010",
+    affinity: "CO",
+    epithet: "EL CARTÓGRAFO DEL PODER",
+    ability: "GENEALOGÍA",
+    effect: "Revela una relación de poder y suma +3 ATQ.",
+  },
+  derrida: {
+    portrait: "/portraits/s02/derrida.svg",
+    code: "FC2-009/010",
+    affinity: "CO",
+    epithet: "EL LECTOR DE LAS FISURAS",
+    ability: "DECONSTRUCCIÓN",
+    effect: "Detecta una oposición oculta y suma +3 DEF.",
+  },
+  rawls: {
+    portrait: "/portraits/s02/rawls.svg",
+    code: "FC2-010/010",
+    affinity: "CO",
+    epithet: "EL DISEÑADOR DE LA EQUIDAD",
+    ability: "VELO DE IGNORANCIA",
+    effect: "Justifica con imparcialidad y suma +3 SAB.",
+  },
+};
+
 function PhilosopherCard({ philosopher, selected, onSelect }) {
   const cardImage = founderCards[philosopher.id];
+  const s02 = s02Cards[philosopher.id];
   const totalPower = philosopher.atk + philosopher.def + philosopher.wis;
 
   return (
@@ -585,6 +669,36 @@ function PhilosopherCard({ philosopher, selected, onSelect }) {
           alt={`Carta FiloCards de ${philosopher.name}`}
           loading="lazy"
         />
+      ) : s02 ? (
+        <div className="filocard__s02">
+          <div className="filocard__s02-brand">
+            <span><b>Φ</b> FiloCards</span>
+            <small>EL DUELO DE LAS IDEAS</small>
+          </div>
+          <div className="filocard__s02-series">
+            <span>S02 · MAESTROS Y CRÍTICOS</span>
+            <span>{s02.code}</span>
+          </div>
+          <div className="filocard__s02-portrait">
+            <img src={s02.portrait} alt={`Retrato grabado de ${philosopher.name}`} loading="lazy" />
+            <span className="filocard__s02-affinity">{s02.affinity}</span>
+            <span className="filocard__s02-power">PF {totalPower}</span>
+          </div>
+          <div className="filocard__s02-title">
+            <h3>{philosopher.name}</h3>
+            <span>{philosopher.rarity.toUpperCase()}</span>
+          </div>
+          <div className="filocard__s02-epithet">{s02.epithet}</div>
+          <div className="filocard__s02-ability">
+            <b>{s02.ability}</b>
+            <span>{s02.effect}</span>
+          </div>
+          <div className="filocard__s02-stats">
+            <span>ATQ <b>{philosopher.atk}</b></span>
+            <span>DEF <b>{philosopher.def}</b></span>
+            <span>SAB <b>{philosopher.wis}</b></span>
+          </div>
+        </div>
       ) : (
         <div className="filocard__future">
           <div className="filocard__brand">
@@ -608,7 +722,13 @@ function PhilosopherCard({ philosopher, selected, onSelect }) {
         {selected ? "SELECCIONADA" : "ELEGIR PARA EL DUELO"}
       </span>
       <span className="filocard__meta">
-        <span>{cardImage ? "S01 · FUNDADORES" : philosopher.era.toUpperCase()}</span>
+        <span>
+          {cardImage
+            ? "S01 · FUNDADORES"
+            : s02
+              ? "S02 · MAESTROS Y CRÍTICOS"
+              : philosopher.era.toUpperCase()}
+        </span>
         <span>PF {totalPower}</span>
         <span>🏆 {philosopher.wins}</span>
       </span>
